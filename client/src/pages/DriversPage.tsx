@@ -68,14 +68,14 @@ export default function DriversPage() {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-gray-800">
-                                {['Driver', 'Phone', 'Plate', 'Status', 'Rating', 'Online', 'COD Holding', 'Actions'].map((h) => (
+                                {['Driver', 'Phone', 'Plate', 'Status', 'Rating', 'Online', 'Total Income', 'Completed', 'COD Holding', 'Actions'].map((h) => (
                                     <th key={h} className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-4">{h}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {isLoading ? (
-                                <tr><td colSpan={8} className="px-6 py-12 text-center text-gray-500">Loading...</td></tr>
+                                <tr><td colSpan={10} className="px-6 py-12 text-center text-gray-500">Loading...</td></tr>
                             ) : drivers.map((driver: any) => (
                                 <tr key={driver._id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors">
                                     <td className="px-6 py-4">
@@ -100,6 +100,8 @@ export default function DriversPage() {
                                     <td className="px-6 py-4">
                                         {driver.online ? <span className="flex items-center gap-1 text-xs text-emerald-400"><span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />Online</span> : <span className="text-xs text-gray-500">Offline</span>}
                                     </td>
+                                    <td className="px-6 py-4 text-sm font-medium text-emerald-400">{driver.totalIncome?.toLocaleString()}đ</td>
+                                    <td className="px-6 py-4 text-sm text-blue-400">{driver.completedOrders || 0}</td>
                                     <td className="px-6 py-4 text-sm font-medium text-yellow-400">{driver.codHolding?.toLocaleString()}đ</td>
                                     <td className="px-6 py-4">
                                         <div className="flex gap-2">

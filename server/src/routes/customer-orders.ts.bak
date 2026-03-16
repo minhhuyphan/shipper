@@ -1,0 +1,127 @@
+import { Router, Request, Response } from 'express';
+import { z } from 'zod';
+import { orderService } from '../services/orderService';
+import { validate } from '../middleware/validate';
+import { auth } from '../middleware/auth';
+
+const router = Router();
+
+// Schema for creating order
+const createOrderSchema = z.object({
+    pickupAddress: z.string().min(5),
+    deliveryAddress: z.string().min(5),
+    customerName: z.string().min(2),
+    customerPhone: z.string().regex(/^[0-9]{10,12}$/),
+    serviceType: z.enum(['express', 'economy']),
+    isBulky: z.boolean().optional().default(false),
+    codAmount: z.number().optional().default(0),
+    description: z.string().optional(),
+});
+
+// Create Order (Public - for customer/driver apps)
+router.post('/', validate(createOrderSchema), async (req: Request, res: Response) => {
+    try {
+        const { 
+            pickupAddress, 
+            deliveryAddress, 
+            customerName,
+            customerPhone, 
+            serviceType, 
+            isBulky, 
+            codAmount,
+            description 
+        } = req.body;
+
+        // Create order with customer info
+        const order = await orderService.create({
+            pickupAddress,
+            deliveryAddress,
+            customer: {
+                name: customerName,
+                phone: customerPhone,
+                address: deliveryAddress,
+            },
+            serviceType,
+            isBulky,
+            codAmount,
+            description,
+        });
+
+        res.status(201).json({
+            success: true,
+            data: order,
+            message: 'Order created successfully',
+        });
+    } catch (error: any) {
+        res.status(error.statusCode || 500).json({ error: error.message });
+    }
+});
+
+// Get Order by ID (Public)
+router.get('/:id', async (req: Request, res: Response) => {
+    try {
+        const order = await orderService.getById(req.params.id);
+        res.json({ success: true, data: order });
+    } catch (error: any) {
+        res.status(error.statusCode || 500).json({ error: error.message });
+    }
+});
+
+// Get Orders by Phone (for customer tracking)
+router.get('/phone/:phone', async (req: Request, res: Response) => {
+    try {
+        const { phone } = req.params;
+        const result = await orderService.listByPhone(phone, {
+            page: parseInt(req.query.page as string) || 1,
+            limit: parseInt(req.query.limit as string) || 20,
+        });
+        res.json({ success: true, data: result });
+    } catch (error: any) {
+        res.status(error.statusCode || 500).json({ error: error.message });
+    }
+});
+
+// Track Order (Real-time tracking)
+router.get('/track/:id', async (req: Request, res: Response) => {
+    try {
+        const order = await orderService.getById(req.params.id);
+        res.json({
+            success: true,
+            data: {
+                status: order.status,
+                driver: order.driver ? { id: order.driver._id, ...order.driver } : null,
+                lastLocation: order.driver ? { lat: 10.762622, lng: 106.660172 } : null,
+                events: order.events,
+                estimatedDelivery: new Date(Date.now() + 30 * 60000),
+            },
+        });
+    } catch (error: any) {
+        res.status(error.statusCode || 500).json({ error: error.message });
+    }
+});
+
+// Cancel Order
+router.patch('/:id/cancel', async (req: Request, res: Response) => {
+    try {
+        const order = await orderService.updateStatus(req.params.id, 'cancelled', req.body.reason);
+        res.json({ success: true, data: order, message: 'Order cancelled' });
+    } catch (error: any) {
+        res.status(error.statusCode || 500).json({ error: error.message });
+    }
+});
+
+// Rate Driver
+router.post('/:id/rate', validate(z.object({
+    rating: z.number().min(1).max(5),
+    comment: z.string().optional(),
+})), async (req: Request, res: Response) => {
+    try {
+        const { rating, comment } = req.body;
+        const order = await orderService.rateDriver(req.params.id, rating, comment);
+        res.json({ success: true, data: order, message: 'Rating submitted' });
+    } catch (error: any) {
+        res.status(error.statusCode || 500).json({ error: error.message });
+    }
+});
+
+export default router;

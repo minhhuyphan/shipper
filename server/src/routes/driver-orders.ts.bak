@@ -1,0 +1,162 @@
+import { Router, Request, Response } from "express";
+import { z } from "zod";
+import { driverService } from "../services/driverService";
+import { orderService } from "../services/orderService";
+import { validate } from "../middleware/validate";
+
+const router = Router();
+
+// Get available orders for driver
+router.get("/available-orders", async (req: Request, res: Response) => {
+  try {
+    const { lat, lng, maxDistance = 5 } = req.query;
+
+    const result = await orderService.getAvailableOrders({
+      driverLat: lat ? parseFloat(lat as string) : undefined,
+      driverLng: lng ? parseFloat(lng as string) : undefined,
+      maxDistance: parseInt(maxDistance as string),
+      page: parseInt(req.query.page as string) || 1,
+      limit: parseInt(req.query.limit as string) || 15,
+    });
+
+    res.json({ success: true, data: result });
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+});
+
+// Accept Order (Driver takes order)
+router.post(
+  "/orders/:orderId/accept",
+  validate(
+    z.object({
+      driverId: z.string(),
+    }),
+  ),
+  async (req: Request, res: Response) => {
+    try {
+      const { orderId } = req.params;
+      const { driverId } = req.body;
+
+      const order = await orderService.assignDriver(orderId, driverId);
+      res.json({ success: true, data: order, message: "Order accepted" });
+    } catch (error: any) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  },
+);
+
+// Update Driver Location (Real-time tracking)
+router.patch(
+  "/:driverId/location",
+  validate(
+    z.object({
+      lat: z.number(),
+      lng: z.number(),
+    }),
+  ),
+  async (req: Request, res: Response) => {
+    try {
+      const { driverId } = req.params;
+      const { lat, lng } = req.body;
+
+      const driver = await driverService.updateLocation(driverId, lat, lng);
+      res.json({ success: true, data: driver, message: "Location updated" });
+    } catch (error: any) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  },
+);
+
+// Toggle Online/Offline
+router.patch(
+  "/:driverId/toggle-online",
+  async (req: Request, res: Response) => {
+    try {
+      const { driverId } = req.params;
+      const driver = await driverService.toggleOnline(driverId);
+      res.json({
+        success: true,
+        data: driver,
+        message: `Driver is now ${driver.online ? "online" : "offline"}`,
+      });
+    } catch (error: any) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  },
+);
+
+// Update Order Status (Driver updates status during delivery)
+router.patch(
+  "/orders/:orderId/status",
+  validate(
+    z.object({
+      driverId: z.string(),
+      status: z.enum(["picking_up", "picked_up", "delivering", "completed"]),
+      proofImages: z.array(z.string()).optional(),
+    }),
+  ),
+  async (req: Request, res: Response) => {
+    try {
+      const { orderId } = req.params;
+      const { status, proofImages } = req.body;
+
+      const order = await orderService.updateStatus(
+        orderId,
+        status,
+        proofImages,
+      );
+      res.json({
+        success: true,
+        data: order,
+        message: `Order status updated to ${status}`,
+      });
+    } catch (error: any) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  },
+);
+
+// Get Driver's Active Orders
+router.get("/:driverId/active-orders", async (req: Request, res: Response) => {
+  try {
+    const { driverId } = req.params;
+    const orders = await orderService.getDriverOrders(driverId, {
+      statuses: ["assigned", "picking_up", "delivering"],
+      page: parseInt(req.query.page as string) || 1,
+      limit: parseInt(req.query.limit as string) || 10,
+    });
+    res.json({ success: true, data: orders });
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+});
+
+// Get Driver's Earnings
+router.get("/:driverId/earnings", async (req: Request, res: Response) => {
+  try {
+    const { driverId } = req.params;
+    const { from, to } = req.query;
+
+    const earnings = await driverService.getEarnings(driverId, {
+      from: from ? new Date(from as string) : undefined,
+      to: to ? new Date(to as string) : undefined,
+    });
+    res.json({ success: true, data: earnings });
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+});
+
+// Get Driver's COD Summary
+router.get("/:driverId/cod-summary", async (req: Request, res: Response) => {
+  try {
+    const { driverId } = req.params;
+    const summary = await driverService.getCodSummary(driverId);
+    res.json({ success: true, data: summary });
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+});
+
+export default router;

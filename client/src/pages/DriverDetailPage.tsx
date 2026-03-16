@@ -63,6 +63,14 @@ export default function DriverDetailPage() {
                             <span>⭐ {driver.ratingAvg?.toFixed(1)} ({driver.totalRatings})</span>
                         </div>
                         <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Total Income</span>
+                            <span className="text-emerald-400 font-medium">{driver.totalIncome?.toLocaleString()}đ</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Completed Orders</span>
+                            <span className="text-blue-400 font-medium">{driver.completedOrders || 0}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
                             <span className="text-gray-500">COD Holding</span>
                             <span className="text-yellow-400 font-medium">{driver.codHolding?.toLocaleString()}đ</span>
                         </div>
@@ -77,11 +85,19 @@ export default function DriverDetailPage() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="text-xs text-gray-500 uppercase mb-2">ID Card</p>
-                                <img src={driver.documents?.idCardUrl} alt="ID Card" className="w-full h-40 object-cover rounded-xl border border-gray-700" />
+                                {driver.documents?.idCardUrl ? (
+                                    <img src={`data:image/jpeg;base64,${driver.documents.idCardUrl}`} alt="ID Card" className="w-full h-40 object-cover rounded-xl border border-gray-700" />
+                                ) : (
+                                    <div className="w-full h-40 rounded-xl border border-gray-700 bg-gray-800 flex items-center justify-center text-gray-500">No image</div>
+                                )}
                             </div>
                             <div>
                                 <p className="text-xs text-gray-500 uppercase mb-2">Driver License</p>
-                                <img src={driver.documents?.licenseUrl} alt="License" className="w-full h-40 object-cover rounded-xl border border-gray-700" />
+                                {driver.documents?.licenseUrl ? (
+                                    <img src={`data:image/jpeg;base64,${driver.documents.licenseUrl}`} alt="License" className="w-full h-40 object-cover rounded-xl border border-gray-700" />
+                                ) : (
+                                    <div className="w-full h-40 rounded-xl border border-gray-700 bg-gray-800 flex items-center justify-center text-gray-500">No image</div>
+                                )}
                             </div>
                         </div>
                     </div>

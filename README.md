@@ -1,125 +1,233 @@
-# 🚚 Shipper Admin Dashboard
+# � Shipper Admin Dashboard
 
-A complete back-office system for a delivery platform with 4 main modules:
-- **Dashboard** — Revenue & order charts, summary cards, online drivers
-- **Order Management** — List, detail, timeline, complaint handling, audit logs
-- **Pricing Engine** — Configure pricing, versioning, and simulation
-- **Driver Management & COD** — Approve drivers, lock accounts, COD settlement, CSV export
+Hệ thống quản lý back-office hoàn chỉnh cho nền tảng giao hàng với 4 module chính.
 
-## Tech Stack
+## 🎯 Chức Năng Chính
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Node.js, Express, TypeScript, MongoDB, Mongoose |
-| Auth | JWT, RBAC (Admin/Staff) |
-| Validation | Zod |
-| Realtime | Socket.IO |
-| Docs | Swagger OpenAPI |
-| Frontend | React (Vite), TailwindCSS, React Router, React Query, ECharts |
+### 1. **Dashboard** 📊
 
-## Setup
+- Xem tổng quan doanh thu, số đơn hàng
+- Biểu đồ doanh số theo thời gian (hàng ngày, tuần, tháng)
+- Danh sách tài xế đang hoạt động
+- Thống kê số lượng đơn hàng
+- Theo dõi hiệu suất giao hàng
 
-### Prerequisites
+### 2. **Quản Lý Đơn Hàng** 📋
+
+- Danh sách tất cả đơn hàng với bộ lọc & tìm kiếm
+- Xem chi tiết đơn hàng (địa chỉ, giá cước, tài xế, COD,...)
+- Xem lịch sử trạng thái đơn hàng (timeline)
+- Xử lý đơn hàng bị khiếu nại
+- Lịch sử kiểm tra & audit log
+- In thông tin đơn hàng
+
+### 3. **Quản Lý Tài Xế** 👨‍💼
+
+- Danh sách tài xế với trạng thái (duyệt, từ chối, khóa)
+- Xem chi tiết profile tài xế
+- Duyệt/từ chối đơn xin ứng tuyển
+- Khóa/mở khóa tài khoản tài xế
+- Xem lịch sử giao hàng của tài xế
+- Xuất danh sách tài xế ra CSV
+
+### 4. **Thanh Toán COD (Tiền Mặt)** 💵
+
+- Quản lý tiền COD của từng tài xế
+- Xem chi tiết các đơn hàng COD chưa thanh toán
+- Ghi nhận tiền thanh toán từ tài xế
+- Lịch sử giao dịch COD
+- Báo cáo thanh toán COD
+- Xuất báo cáo ra CSV
+
+### 5. **Cấu Hình Giá Cước** 💰
+
+- Tạo & chỉnh sửa bảng giá
+- Tính giá cước theo khoảng cách
+- Phí cơ bản & kinh phí khác
+- Phiên bản giá (hiệu lực từ đến)
+- Mô phỏng tính giá (test trước khi áp dụng)
+- Lịch sử thay đổi giá cước
+
+## 🔐 Tính Năng Bảo Mật
+
+- **Xác thực JWT** — Token-based authentication
+- **Phân quyền (RBAC)** — Admin & Staff roles
+- **Mã hóa mật khẩu** — Bcrypt hashing
+- **Validate dữ liệu** — Zod schema validation
+- **Audit log** — Ghi nhận tất cả thay đổi
+
+## 🏗️ Tech Stack
+
+| Thành Phần           | Công Nghệ                    |
+| -------------------- | ---------------------------- |
+| **Runtime**          | Node.js 18+                  |
+| **Server**           | Express.js, TypeScript       |
+| **Database**         | MongoDB, Mongoose            |
+| **Frontend**         | React 19, Vite, TailwindCSS  |
+| **Realtime**         | Socket.IO                    |
+| **API Docs**         | Swagger/OpenAPI              |
+| **Validation**       | Zod                          |
+| **State Management** | React Query (TanStack Query) |
+| **Charts**           | ECharts                      |
+| **Routing**          | React Router v7              |
+
+## 🚀 Cài Đặt & Chạy
+
+### Yêu Cầu
+
 - Node.js 18+
-- MongoDB running (local or remote)
+- MongoDB (local hoặc remote)
 
-### 1. Configure MongoDB URL
+### 1. Cấu Hình MongoDB
 
-Edit `server/.env` and set your MongoDB connection string:
-```
+Chỉnh sửa `server/.env`:
+
+```env
 MONGODB_URI=mongodb://localhost:27017/shipper-admin
+PORT=5000
+JWT_SECRET=your-secret-key
+NODE_ENV=development
 ```
 
-### 2. Install Dependencies
+### 2. Cài Đặt Dependencies
 
 ```bash
-# Server
+# Backend
 cd server
 npm install
 
-# Client
+# Frontend
 cd ../client
 npm install
 ```
 
-### 3. Seed Database
+### 3. Khởi Chạy
 
 ```bash
-cd server
-npx ts-node src/seed.ts
-```
-
-This creates:
-- 50 orders (mixed statuses)
-- 10 drivers (pending/approved/online/offline)
-- 2 pricing configurations
-- Admin user: `admin@shipper.com` / `admin123`
-- Staff user: `staff@shipper.com` / `admin123`
-
-### 4. Start Development
-
-```bash
-# Terminal 1: Server
+# Terminal 1 - Backend (port 5000)
 cd server
 npm run dev
 
-# Terminal 2: Client
+# Terminal 2 - Frontend (port 5173)
 cd client
 npm run dev
 ```
 
-- **Client**: http://localhost:5173
-- **Server**: http://localhost:5000
-- **Swagger Docs**: http://localhost:5000/api-docs
+### 4. Truy Cập
 
-## API Overview
+- **Frontend**: http://localhost:5173
+- **API**: http://localhost:5000
+- **API Docs (Swagger)**: http://localhost:5000/api-docs
 
-| Module | Endpoint | Method |
-|--------|----------|--------|
-| Auth | `/api/auth/login` | POST |
-| Stats | `/api/admin/stats/revenue` | GET |
-| Stats | `/api/admin/stats/orders-summary` | GET |
-| Stats | `/api/admin/stats/drivers/online` | GET |
-| Orders | `/api/admin/orders` | GET |
-| Orders | `/api/admin/orders/:id` | GET/PATCH |
-| Orders | `/api/admin/orders/:id/complaint` | PATCH |
-| Orders | `/api/admin/orders/:id/audit` | GET |
-| Pricing | `/api/admin/pricing` | GET/POST |
-| Pricing | `/api/admin/pricing/active` | GET |
-| Pricing | `/api/admin/pricing/:id/activate` | POST |
-| Pricing | `/api/admin/pricing/simulate` | POST |
-| Drivers | `/api/admin/drivers` | GET |
-| Drivers | `/api/admin/drivers/:id` | GET |
-| Drivers | `/api/admin/drivers/:id/approve` | PATCH |
-| Drivers | `/api/admin/drivers/:id/lock` | PATCH |
-| COD | `/api/admin/drivers/cod/summary` | GET |
-| COD | `/api/admin/drivers/cod/settle` | POST |
-| COD | `/api/admin/drivers/cod/settlements` | GET |
-| COD | `/api/admin/drivers/cod/export.csv` | GET |
+### 5. Tài Khoản Mặc Định
 
-## Project Structure
+```
+Email: admin@shipper.local
+Password: password123
+```
+
+## 📁 Cấu Trúc Project
 
 ```
 shipper/
-├── server/
+├── client/                 # React Frontend
 │   ├── src/
-│   │   ├── config/        # DB connection, env config
-│   │   ├── middleware/     # Auth, RBAC, validation, error handling
-│   │   ├── models/         # Mongoose schemas
-│   │   ├── routes/         # Express route handlers
-│   │   ├── services/       # Business logic
-│   │   ├── swagger.ts      # OpenAPI spec
-│   │   ├── seed.ts         # Database seeder
-│   │   └── index.ts        # Server entry point
-│   └── package.json
-├── client/
+│   │   ├── pages/         # Pages (Login, Dashboard, Orders, etc)
+│   │   ├── components/    # Reusable components
+│   │   ├── contexts/      # Auth context
+│   │   ├── api/           # API services
+│   │   └── assets/        # Images, fonts
+│   └── vite.config.ts
+│
+├── server/                # Express Backend
 │   ├── src/
-│   │   ├── api/            # Axios instance & API services
-│   │   ├── components/     # Layout, ProtectedRoute
-│   │   ├── contexts/       # AuthContext
-│   │   ├── pages/          # All page components
-│   │   ├── App.tsx         # Router setup
-│   │   └── main.tsx        # Entry point
+│   │   ├── routes/        # API routes
+│   │   ├── models/        # MongoDB schemas
+│   │   ├── services/      # Business logic
+│   │   ├── middleware/    # Auth, validation, error handling
+│   │   ├── utils/         # Utilities
+│   │   ├── config/        # Configuration
+│   │   └── index.ts       # Server entry
 │   └── package.json
-└── README.md
+│
+├── android/               # Android mobile app
+├── docker-compose.yml     # Docker configuration
+├── README.md              # This file
+└── MOBILE_API_GUIDE.md    # Mobile API documentation
 ```
+
+## 📡 API Endpoints
+
+### Authentication
+
+- `POST /api/auth/login` — Đăng nhập
+- `POST /api/auth/logout` — Đăng xuất
+- `POST /api/auth/refresh` — Làm mới token
+
+### Orders
+
+- `GET /api/orders` — Danh sách đơn hàng
+- `GET /api/orders/:id` — Chi tiết đơn hàng
+- `PUT /api/orders/:id` — Cập nhật đơn hàng
+- `GET /api/orders/:id/timeline` — Lịch sử trạng thái
+
+### Drivers
+
+- `GET /api/drivers` — Danh sách tài xế
+- `GET /api/drivers/:id` — Chi tiết tài xế
+- `PATCH /api/drivers/:id/approve` — Duyệt tài xế
+- `PATCH /api/drivers/:id/lock` — Khóa tài khoản
+
+### Pricing
+
+- `GET /api/pricing` — Danh sách bảng giá
+- `POST /api/pricing` — Tạo bảng giá mới
+- `PUT /api/pricing/:id` — Cập nhật bảng giá
+- `POST /api/pricing/simulate` — Mô phỏng tính giá
+
+### COD Settlement
+
+- `GET /api/cod-settlement` — Danh sách thanh toán COD
+- `POST /api/cod-settlement` — Ghi nhận tiền COD
+- `GET /api/cod-settlement/report` — Báo cáo COD
+
+### Statistics
+
+- `GET /api/stats/revenue` — Thống kê doanh thu
+- `GET /api/stats/orders` — Thống kê đơn hàng
+- `GET /api/stats/drivers` — Thống kê tài xế
+
+## 🔧 Phát Triển
+
+### Build Production
+
+```bash
+# Backend
+cd server
+npm run build
+
+# Frontend
+cd client
+npm run build
+```
+
+### Lint & Format
+
+```bash
+cd client
+npm run lint
+```
+
+## 📚 Tài Liệu Bổ Sung
+
+- [MOBILE_API_GUIDE.md](MOBILE_API_GUIDE.md) — API cho ứng dụng mobile tài xế
+- [BACKEND_ANDROID_SETUP.md](BACKEND_ANDROID_SETUP.md) — Hướng dẫn cấu hình backend cho Android
+- [API_FIXED_NOTES.md](API_FIXED_NOTES.md) — Ghi chú về các sửa chữa API
+
+## 📞 Support
+
+Liên hệ hỗ trợ kỹ thuật để được giúp đỡ.
+
+---
+
+**Phiên bản**: 1.0.0 | **Cập nhật**: Tháng 3, 2026
