@@ -1,25 +1,37 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import api from "../api/axios";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("admin@shipper.com");
-  const [password, setPassword] = useState("admin123");
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
+
     try {
-      await login(email, password);
-      navigate("/dashboard");
+      const response = await api.post("/auth/forgot-password", { email });
+      if (response.data.ok) {
+        setSuccess(
+          "Nếu tài khoản tồn tại, email đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra hộp thư.",
+        );
+        setEmail("");
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
     } catch (err: any) {
-      setError(err.response?.data?.error || "Login failed");
+      setError(
+        err.response?.data?.message || "Có lỗi xảy ra. Vui lòng thử lại.",
+      );
     } finally {
       setLoading(false);
     }
@@ -35,12 +47,12 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
           <div className="text-center mb-8">
-            <div className="text-5xl mb-4">🚚</div>
+            <div className="text-5xl mb-4">🔐</div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Quản trị Shipper
+              Quên Mật Khẩu
             </h1>
             <p className="text-gray-500 mt-2 text-sm">
-              Đăng nhập vào bảng điều khiển admin
+              Nhập email để nhận link đặt lại mật khẩu
             </p>
           </div>
 
@@ -48,6 +60,12 @@ export default function LoginPage() {
             {error && (
               <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm">
                 {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="bg-green-500/10 border border-green-500/30 text-green-400 px-4 py-3 rounded-xl text-sm">
+                {success}
               </div>
             )}
 
@@ -59,43 +77,33 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
                 className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 transition-all"
-                placeholder="admin@shipper.com"
+                placeholder="Nhập email của bạn"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Mật khẩu
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 transition-all"
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => navigate("/forgot-password")}
-                className="text-xs text-blue-400 hover:text-blue-300 mt-2 transition-colors"
-              >
-                Quên mật khẩu?
-              </button>
             </div>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !email}
               className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-blue-500/25 disabled:opacity-50"
             >
-              {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {loading ? "Đang gửi..." : "Gửi Link Đặt Lại"}
             </button>
           </form>
 
-          <p className="text-center text-gray-600 text-xs mt-6">
-            Demo: admin@shipper.com / admin123
-          </p>
+          <div className="mt-6 text-center">
+            <p className="text-gray-600 text-sm">
+              Nhớ mật khẩu?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+              >
+                Đăng nhập
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

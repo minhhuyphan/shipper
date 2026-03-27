@@ -2,11 +2,11 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const navItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/orders', label: 'Orders', icon: '📦' },
-    { path: '/pricing', label: 'Pricing', icon: '💰' },
-    { path: '/drivers', label: 'Drivers', icon: '🚗' },
-    { path: '/cod', label: 'COD', icon: '💵' },
+    { path: '/dashboard', label: 'Bảng điều khiển', icon: '📊' },
+    { path: '/orders', label: 'Đơn hàng', icon: '📦' },
+    { path: '/pricing', label: 'Bảng giá', icon: '💰' },
+    { path: '/drivers', label: 'Tài xế', icon: '🚗' },
+    { path: '/cod', label: 'Thu hộ (COD)', icon: '💵' },
 ];
 
 export default function Layout() {
@@ -19,10 +19,10 @@ export default function Layout() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-950 text-gray-100">
+        <div className="flex h-screen bg-gray-900 text-gray-100 font-sans">
             {/* Sidebar */}
-            <aside className="w-64 bg-gray-900/80 backdrop-blur-xl border-r border-gray-800 flex flex-col">
-                <div className="p-6 border-b border-gray-800">
+            <aside className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
+                <div className="p-6 border-b border-gray-700">
                     <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                         🚚 Shipper Admin
                     </h1>
@@ -34,8 +34,8 @@ export default function Layout() {
                             to={item.path}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30 shadow-lg shadow-blue-500/10'
-                                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
+                                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/50'
                                 }`
                             }
                         >
@@ -44,7 +44,7 @@ export default function Layout() {
                         </NavLink>
                     ))}
                 </nav>
-                <div className="p-4 border-t border-gray-800">
+                <div className="p-4 border-t border-gray-700">
                     <div className="flex items-center gap-3 mb-3 px-2">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-sm font-bold">
                             {user?.name?.charAt(0) || 'A'}
@@ -58,7 +58,7 @@ export default function Layout() {
                         onClick={handleLogout}
                         className="w-full px-4 py-2 text-sm text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                     >
-                        Sign Out
+                        Đăng xuất
                     </button>
                 </div>
             </aside>

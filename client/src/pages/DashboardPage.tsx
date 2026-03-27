@@ -4,9 +4,9 @@ import ReactECharts from 'echarts-for-react';
 import { statsApi } from '../api/services';
 
 const RANGE_OPTIONS = [
-    { label: '7 Days', days: 7 },
-    { label: '30 Days', days: 30 },
-    { label: '90 Days', days: 90 },
+    { label: '7 Ngày', days: 7 },
+    { label: '30 Ngày', days: 30 },
+    { label: '90 Ngày', days: 90 },
 ];
 
 export default function DashboardPage() {
@@ -37,10 +37,10 @@ export default function DashboardPage() {
     const drivers = onlineDrivers?.data || [];
 
     const cards = [
-        { label: 'Running Orders', value: summary.running, color: 'from-blue-600 to-blue-400', icon: '🔄' },
-        { label: 'Completed', value: summary.completed, color: 'from-emerald-600 to-emerald-400', icon: '✅' },
-        { label: 'Cancelled', value: summary.cancelled, color: 'from-red-600 to-red-400', icon: '❌' },
-        { label: 'Online Drivers', value: drivers.length, color: 'from-purple-600 to-purple-400', icon: '🚗' },
+        { label: 'Đơn đang chạy', value: summary.running, color: 'from-blue-600 to-blue-400', icon: '🔄' },
+        { label: 'Hoàn thành', value: summary.completed, color: 'from-emerald-600 to-emerald-400', icon: '✅' },
+        { label: 'Đã hủy', value: summary.cancelled, color: 'from-red-600 to-red-400', icon: '❌' },
+        { label: 'Tài xế trực tuyến', value: drivers.length, color: 'from-purple-600 to-purple-400', icon: '🚗' },
     ];
 
     const revenueChartOption = {
@@ -49,7 +49,7 @@ export default function DashboardPage() {
         xAxis: { type: 'category' as const, data: revenue.map((r: any) => r.date), axisLine: { lineStyle: { color: '#374151' } }, axisLabel: { color: '#9ca3af' } },
         yAxis: { type: 'value' as const, axisLine: { lineStyle: { color: '#374151' } }, axisLabel: { color: '#9ca3af', formatter: (v: number) => `${(v / 1000).toFixed(0)}K` }, splitLine: { lineStyle: { color: '#1f2937' } } },
         series: [{
-            name: 'Revenue',
+            name: 'Doanh thu',
             type: 'bar',
             data: revenue.map((r: any) => r.revenue),
             itemStyle: { borderRadius: [6, 6, 0, 0], color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#3b82f6' }, { offset: 1, color: '#1d4ed8' }] } },
@@ -62,7 +62,7 @@ export default function DashboardPage() {
         xAxis: { type: 'category' as const, data: revenue.map((r: any) => r.date), axisLine: { lineStyle: { color: '#374151' } }, axisLabel: { color: '#9ca3af' } },
         yAxis: { type: 'value' as const, axisLine: { lineStyle: { color: '#374151' } }, axisLabel: { color: '#9ca3af' }, splitLine: { lineStyle: { color: '#1f2937' } } },
         series: [{
-            name: 'Orders',
+            name: 'Đơn hàng',
             type: 'line',
             smooth: true,
             data: revenue.map((r: any) => r.count),
@@ -76,8 +76,8 @@ export default function DashboardPage() {
         <div>
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold">Dashboard</h1>
-                    <p className="text-gray-500 text-sm mt-1">Overview of your delivery platform</p>
+                    <h1 className="text-2xl font-bold">Bảng điều khiển</h1>
+                    <p className="text-gray-500 text-sm mt-1">Tổng quan về nền tảng giao hàng của bạn</p>
                 </div>
                 <div className="flex gap-2">
                     {RANGE_OPTIONS.map((opt) => (
@@ -112,20 +112,20 @@ export default function DashboardPage() {
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 <div className="bg-gray-900/80 backdrop-blur border border-gray-800 rounded-2xl p-6">
-                    <h3 className="text-lg font-semibold mb-4">Revenue by Day</h3>
+                    <h3 className="text-lg font-semibold mb-4">Doanh thu theo ngày</h3>
                     <ReactECharts option={revenueChartOption} style={{ height: 320 }} />
                 </div>
                 <div className="bg-gray-900/80 backdrop-blur border border-gray-800 rounded-2xl p-6">
-                    <h3 className="text-lg font-semibold mb-4">Orders by Day</h3>
+                    <h3 className="text-lg font-semibold mb-4">Đơn hàng theo ngày</h3>
                     <ReactECharts option={ordersChartOption} style={{ height: 320 }} />
                 </div>
             </div>
 
             {/* Online Drivers */}
             <div className="bg-gray-900/80 backdrop-blur border border-gray-800 rounded-2xl p-6">
-                <h3 className="text-lg font-semibold mb-4">Online Drivers ({drivers.length})</h3>
+                <h3 className="text-lg font-semibold mb-4">Tài xế trực tuyến ({drivers.length})</h3>
                 {drivers.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No drivers currently online</p>
+                    <p className="text-gray-500 text-sm">Không có tài xế nào trực tuyến</p>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {drivers.map((driver: any) => (

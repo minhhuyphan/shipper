@@ -118,7 +118,7 @@ export class DriverService {
     }
   }
 
-  async getById(id: string) {
+  async getById(id: string): Promise<any> {
     console.log("🔍 getById called with ID:", id);
     const driver = await Driver.findById(id).lean();
     console.log(

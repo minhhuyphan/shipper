@@ -12,6 +12,15 @@ const STATUS_OPTIONS = [
   "completed",
   "cancelled",
 ];
+const STATUS_LABELS: Record<string, string> = {
+  all: "Tất cả",
+  pending: "Chờ xử lý",
+  assigned: "Đã phân công",
+  picking_up: "Đang lấy hàng",
+  delivering: "Đang giao",
+  completed: "Hoàn thành",
+  cancelled: "Đã hủy",
+};
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-yellow-500/20 text-yellow-400",
   assigned: "bg-blue-500/20 text-blue-400",
@@ -44,10 +53,10 @@ export default function OrdersPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold">Order Management</h1>
+                <div>
+          <h1 className="text-2xl font-bold">Quản lý đơn hàng</h1>
           <p className="text-gray-500 text-sm mt-1">
-            {pagination.total} total orders
+            Tổng cộng {pagination.total} đơn hàng
           </p>
         </div>
       </div>
@@ -56,7 +65,7 @@ export default function OrdersPage() {
       <div className="flex flex-wrap gap-3 mb-6">
         <input
           type="text"
-          placeholder="Search by order code, customer..."
+          placeholder="Tìm theo mã đơn, khách hàng..."
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
@@ -72,13 +81,13 @@ export default function OrdersPage() {
                 setStatus(s);
                 setPage(1);
               }}
-              className={`px-3 py-2 text-xs rounded-lg capitalize transition-all ${
+              className={`px-3 py-2 text-xs rounded-lg transition-all ${
                 status === s
                   ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
                   : "text-gray-400 bg-gray-800/50 border border-gray-700 hover:text-gray-200"
               }`}
             >
-              {s === "all" ? "All" : s.replace("_", " ")}
+              {STATUS_LABELS[s]}
             </button>
           ))}
         </div>
@@ -91,13 +100,13 @@ export default function OrdersPage() {
             <thead>
               <tr className="border-b border-gray-800">
                 {[
-                  "Order Code",
-                  "Customer",
-                  "Driver",
-                  "Status",
-                  "Service",
-                  "Total",
-                  "Date",
+                  "Mã đơn",
+                  "Khách hàng",
+                  "Tài xế",
+                  "Trạng thái",
+                  "Dịch vụ",
+                  "Tổng cộng",
+                  "Ngày tạo",
                 ].map((h) => (
                   <th
                     key={h}
@@ -115,7 +124,7 @@ export default function OrdersPage() {
                     colSpan={7}
                     className="px-6 py-12 text-center text-gray-500"
                   >
-                    Loading...
+                    Đang tải...
                   </td>
                 </tr>
               ) : orders.length === 0 ? (
@@ -124,7 +133,7 @@ export default function OrdersPage() {
                     colSpan={7}
                     className="px-6 py-12 text-center text-gray-500"
                   >
-                    No orders found
+                    Không tìm thấy đơn hàng
                   </td>
                 </tr>
               ) : (
@@ -148,9 +157,9 @@ export default function OrdersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-2.5 py-1 rounded-lg text-xs font-medium capitalize ${STATUS_COLORS[order.status] || ""}`}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium ${STATUS_COLORS[order.status] || ""}`}
                       >
-                        {order.status?.replace("_", " ")}
+                        {STATUS_LABELS[order.status] || order.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm capitalize text-gray-300">
@@ -172,7 +181,7 @@ export default function OrdersPage() {
         {/* Pagination */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-gray-800">
           <p className="text-sm text-gray-500">
-            Page {pagination.page} of {pagination.pages}
+            Trang {pagination.page} / {pagination.pages}
           </p>
           <div className="flex gap-2">
             <button
@@ -180,14 +189,14 @@ export default function OrdersPage() {
               disabled={page === 1}
               className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg disabled:opacity-30 hover:bg-gray-700 transition-all"
             >
-              Previous
+              Trước
             </button>
             <button
               onClick={() => setPage(Math.min(pagination.pages, page + 1))}
               disabled={page >= pagination.pages}
               className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg disabled:opacity-30 hover:bg-gray-700 transition-all"
             >
-              Next
+              Sau
             </button>
           </div>
         </div>
