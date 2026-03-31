@@ -58,28 +58,41 @@ export default function CODPage() {
                             <p className="text-gray-500 text-sm">Không có tài xế nào đang giữ tiền COD</p>
                         ) : (
                             <div className="space-y-3">
-                                {summary.drivers.map((driver: any) => (
-                                    <div key={driver._id} className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-sm font-bold">
-                                                {driver.name?.charAt(0)}
+                                {summary.drivers.map((driver: any) => {
+                                    const isLate = driver.oldestPendingDate && (new Date().getTime() - new Date(driver.oldestPendingDate).getTime() > 24 * 60 * 60 * 1000);
+                                    return (
+                                        <div key={driver._id} className={`flex items-center justify-between p-4 bg-gray-800/50 rounded-xl border ${isLate ? 'border-red-500/30' : 'border-transparent'}`}>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-sm font-bold">
+                                                    {driver.name?.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="text-sm font-medium">{driver.name}</p>
+                                                        {isLate && (
+                                                            <span className="px-1.5 py-0.5 bg-red-500/20 text-red-500 text-[10px] font-bold rounded uppercase tracking-wider border border-red-500/30 animate-pulse">
+                                                                ⚠️ Nộp muộn
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <p className="text-xs text-gray-500">{driver.phone} • {driver.vehiclePlate}</p>
+                                                    {driver.oldestPendingDate && (
+                                                        <p className="text-[10px] text-gray-400 mt-1">Đơn hàng đầu tiên: {new Date(driver.oldestPendingDate).toLocaleString()}</p>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="text-sm font-medium">{driver.name}</p>
-                                                <p className="text-xs text-gray-500">{driver.phone} • {driver.vehiclePlate}</p>
+                                            <div className="text-right">
+                                                <p className="text-lg font-bold text-yellow-400">{driver.codHolding?.toLocaleString()}đ</p>
+                                                <button
+                                                    onClick={() => setSettleForm({ ...settleForm, driverId: driver._id, amount: driver.codHolding })}
+                                                    className="text-xs text-blue-400 hover:text-blue-300 mt-1"
+                                                >
+                                                    Đối soát →
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="text-right">
-                                            <p className="text-lg font-bold text-yellow-400">{driver.codHolding?.toLocaleString()}đ</p>
-                                            <button
-                                                onClick={() => setSettleForm({ ...settleForm, driverId: driver._id, amount: driver.codHolding })}
-                                                className="text-xs text-blue-400 hover:text-blue-300 mt-1"
-                                            >
-                                                Đối soát →
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

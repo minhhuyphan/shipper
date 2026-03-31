@@ -435,9 +435,17 @@ router.get("/:id/cod-pending", async (req: Request, res: Response) => {
     try {
       driver = await Driver.findById(driverId);
     } catch {
-      const user = await User.findById(driverId);
-      if (user && (user as any).phone) {
-        driver = await Driver.findOne({ phone: (user as any).phone });
+      // id format is invalid
+    }
+
+    if (!driver) {
+      try {
+        const user = await User.findById(driverId);
+        if (user && (user as any).phone) {
+          driver = await Driver.findOne({ phone: (user as any).phone });
+        }
+      } catch {
+        // user lookup failed
       }
     }
 
@@ -448,14 +456,22 @@ router.get("/:id/cod-pending", async (req: Request, res: Response) => {
     }
 
     // Get all completed orders with COD amount
-    const ordersWithCOD = await Order.find({
+    const query = {
       driver: driver._id,
       status: "completed",
       codAmount: { $gt: 0 },
-    })
+      codSettled: { $ne: true },
+    };
+    console.log("🔍 COD Pending Query:", JSON.stringify(query));
+    
+    const ordersWithCOD = await Order.find(query)
       .select("orderCode codAmount updatedAt")
       .sort({ updatedAt: -1 })
       .lean();
+    const fs = require("fs");
+    fs.appendFileSync("cod-debug.log", `[${new Date().toISOString()}] Query: ${JSON.stringify(query)} -> Found: ${ordersWithCOD.length}\n`);
+    
+    console.log(`✅ Found ${ordersWithCOD.length} orders for driver ${driver._id}`);
 
     // Calculate totals
     const totalCOD = ordersWithCOD.reduce(
@@ -494,9 +510,17 @@ router.get("/:id/cod-settlements", async (req: Request, res: Response) => {
     try {
       driver = await Driver.findById(driverId);
     } catch {
-      const user = await User.findById(driverId);
-      if (user && (user as any).phone) {
-        driver = await Driver.findOne({ phone: (user as any).phone });
+      // id format is invalid
+    }
+
+    if (!driver) {
+      try {
+        const user = await User.findById(driverId);
+        if (user && (user as any).phone) {
+          driver = await Driver.findOne({ phone: (user as any).phone });
+        }
+      } catch {
+        // user lookup failed
       }
     }
 

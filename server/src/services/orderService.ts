@@ -196,6 +196,19 @@ export class OrderService {
         timestamp: new Date(),
         note: `Status changed to ${updates.status}`,
       });
+
+      // Update driver codHolding if order is completed and has COD
+      if (updates.status === "completed" && order.codAmount > 0 && order.driver) {
+        try {
+          const { Driver } = await import("../models");
+          await Driver.findByIdAndUpdate(order.driver, {
+            $inc: { codHolding: order.codAmount }
+          });
+          console.log(`✅ Updated driver ${order.driver} codHolding by +${order.codAmount}`);
+        } catch (err) {
+          console.error("❌ Error updating driver codHolding:", err);
+        }
+      }
     }
 
     // Handle delivery/pickup photos from mobile app
@@ -366,7 +379,8 @@ export class OrderService {
     serviceType: "express" | "economy";
     isBulky?: boolean;
     codAmount?: number;
-    size?: string; // new: size field for surcharge calculation
+    size?: string;
+    packagePhoto?: string;
   }) {
     try {
       // Generate unique order code
@@ -374,59 +388,63 @@ export class OrderService {
 
       // Load active pricing config
       let pricingConfig = await PricingConfig.findOne({ active: true });
+      if (!pricingConfig) {
+        throw new AppError("No active pricing configuration found", 500);
+      }
 
-      // ===== PRICING CALCULATION (matches Android app logic) =====
+      // ===== PRICING CALCULATION (Centralized Logic) =====
+      
+      // 1. Base fare + Distance charge
+      const baseFare = pricingConfig.baseFare;
+      const extraKm = Math.max(0, (data.distanceKm || 0) - (pricingConfig.baseDistanceKm || 0));
+      const distanceCharge = Math.round(extraKm * (pricingConfig.pricePerKm || 0));
 
-      // 1. Base price (from config or region-based)
-      let baseFare =
-        pricingConfig?.baseFare || this.getBasePrice(data.deliveryAddress);
-
-      // 2. Size surcharge (0, 25k, or 50k based on size field)
+      // 2. Size/Bulky surcharge
       const sizeSurcharge = this.calculateSizeSurcharge(data.size || "");
 
-      // 3. Service fee (0 for economy, or basePrice * (multiplier - 1) for express)
-      let serviceFee = 0;
-      if (data.serviceType === "express") {
-        const multiplier = pricingConfig?.services?.express?.multiplier || 1.3;
-        serviceFee = Math.round(baseFare * (multiplier - 1));
-      }
-
-      // 4. Peak hour surcharge (percentage of baseFare + sizeSurcharge + serviceFee)
+      // 3. Peak hour surcharge (based on config hours/fee or percent)
       let peakHourSurcharge = 0;
       if (this.isPeakHour()) {
-        const surchargePercent = pricingConfig?.peakHourSurchargePercent || 20;
-        const subtotal = baseFare + sizeSurcharge + serviceFee;
-        peakHourSurcharge = Math.round((surchargePercent / 100) * subtotal);
+        // Use percentage if defined, otherwise fixed fee
+        if (pricingConfig.peakHourSurchargePercent) {
+          const subtotalForPeak = baseFare + distanceCharge + sizeSurcharge;
+          peakHourSurcharge = Math.round((pricingConfig.peakHourSurchargePercent / 100) * subtotalForPeak);
+        } else if (pricingConfig.peakHourSurcharge?.fee) {
+          peakHourSurcharge = pricingConfig.peakHourSurcharge.fee;
+        }
       }
 
-      // 5. COD fee (fixed amount from config or percentage of COD amount)
+      // 4. Service Multiplier (Economy vs Express)
+      const service = pricingConfig.services[data.serviceType] || { multiplier: 1 };
+      const serviceMultiplier = service.enabled ? service.multiplier : 1;
+      
+      // Subtotal before COD
+      const subtotalBeforeCod = (baseFare + distanceCharge + sizeSurcharge + peakHourSurcharge) * serviceMultiplier;
+
+      // 5. COD fee
       let codFee = 0;
       if (data.codAmount && data.codAmount > 0) {
-        if (pricingConfig?.codFee) {
-          if (typeof pricingConfig.codFee === "number") {
-            // Simple fixed amount
-            codFee = pricingConfig.codFee;
-          } else if (typeof pricingConfig.codFee === "object") {
-            // Complex object with type and value
-            const codFeeConfig = pricingConfig.codFee as any;
-            if (codFeeConfig.type === "percentage") {
-              codFee = Math.round((data.codAmount * codFeeConfig.value) / 100);
-            } else {
-              codFee = codFeeConfig.value || 0;
-            }
+        const codConfig: any = pricingConfig.codFee;
+        if (typeof codConfig === "object") {
+          if (codConfig.type === "percentage") {
+            codFee = Math.round((data.codAmount * (codConfig.value || 0)) / 100);
+          } else {
+            codFee = codConfig.value || 0;
           }
+        } else if (typeof codConfig === "number") {
+          codFee = codConfig;
         }
       }
 
       // Total
-      const total =
-        baseFare + sizeSurcharge + serviceFee + peakHourSurcharge + codFee;
+      const total = Math.round(subtotalBeforeCod + codFee);
 
       const pricingBreakdown = {
         baseFare,
-        distanceCharge: sizeSurcharge, // renamed from distanceCharge to sizeSurcharge for clarity
+        distanceCharge,
         peakHourSurcharge,
-        bulkyItemSurcharge: serviceFee, // renamed from bulkyItemSurcharge to serviceFee
+        bulkyItemSurcharge: sizeSurcharge,
+        serviceMultiplier: serviceMultiplier,
         codFee,
         total,
       };
@@ -451,6 +469,7 @@ export class OrderService {
           },
         ],
         auditLogs: [],
+        packagePhoto: data.packagePhoto,
       });
 
       await order.save();

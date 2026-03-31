@@ -58,9 +58,11 @@ export interface IOrder extends Document {
   isBulky: boolean;
   pricingBreakdown: IPricingBreakdown;
   codAmount: number;
+  codSettled: boolean;
   deliveryProofImages: string[];
   events: IOrderEvent[];
   complaint?: IComplaint;
+  packagePhoto?: string;
   auditLogs: IAuditLog[];
   createdAt: Date;
   updatedAt: Date;
@@ -151,7 +153,9 @@ const orderSchema = new Schema<IOrder>(
     isBulky: { type: Boolean, default: false },
     pricingBreakdown: { type: pricingBreakdownSchema, required: true },
     codAmount: { type: Number, default: 0 },
+    codSettled: { type: Boolean, default: false, index: true },
     deliveryProofImages: [{ type: String }],
+    packagePhoto: { type: String, default: "" },
     events: [orderEventSchema],
     complaint: complaintSchema,
     auditLogs: [auditLogSchema],

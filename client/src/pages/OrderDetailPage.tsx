@@ -192,6 +192,20 @@ export default function OrderDetailPage() {
             </div>
           </div>
 
+          {/* Package Photo */}
+          {order.packagePhoto && (
+            <div className="bg-gray-900/80 backdrop-blur border border-gray-800 rounded-2xl p-6">
+              <h3 className="text-lg font-semibold mb-4">Ảnh gói hàng (Khách chụp)</h3>
+              <div className="flex gap-3 flex-wrap">
+                  <img
+                    src={order.packagePhoto}
+                    alt="Package"
+                    className="w-full max-h-96 object-contain rounded-xl border border-gray-700"
+                  />
+              </div>
+            </div>
+          )}
+
           {/* Delivery Proof */}
           {order.deliveryProofImages?.length > 0 && (
             <div className="bg-gray-900/80 backdrop-blur border border-gray-800 rounded-2xl p-6">

@@ -167,8 +167,29 @@ export class DriverService {
       .select("name phone codHolding vehiclePlate")
       .sort({ codHolding: -1 })
       .lean();
+
+    const summaryWithDates = await Promise.all(
+      drivers.map(async (d: any) => {
+        // Find oldest completed, non-settled COD order
+        const oldestOrder = await Order.findOne({
+          driver: d._id,
+          status: "completed",
+          codSettled: { $ne: true },
+          codAmount: { $gt: 0 },
+        })
+          .sort({ updatedAt: 1 })
+          .select("updatedAt")
+          .lean();
+
+        return {
+          ...d,
+          oldestPendingDate: oldestOrder?.updatedAt || null,
+        };
+      }),
+    );
+
     const totalHolding = drivers.reduce((sum, d) => sum + d.codHolding, 0);
-    return { drivers, totalHolding };
+    return { drivers: summaryWithDates, totalHolding };
   }
 
   async settle(
@@ -182,6 +203,39 @@ export class DriverService {
 
     driver.codHolding -= data.amount;
     await driver.save();
+
+    // Mark corresponding orders as codSettled
+    // Find non-settled orders, oldest first
+    const pendingOrders = await Order.find({
+      driver: driver._id,
+      status: "completed",
+      codSettled: { $ne: true },
+      codAmount: { $gt: 0 },
+    }).sort({ updatedAt: 1 });
+
+    let remainingSettleAmount = data.amount;
+    for (const order of pendingOrders) {
+      if (remainingSettleAmount <= 0) break;
+      if (order.codAmount <= remainingSettleAmount) {
+        order.codSettled = true;
+        remainingSettleAmount -= order.codAmount;
+        await order.save();
+      } else {
+        // partial settlement of an order is tricky. 
+        // For now, if we can't settle the whole order, we stop here.
+        // Or we could mark it settled anyway if it's "close enough"? 
+        // Let's just break for accuracy.
+        break;
+      }
+    }
+
+    // Safety: if holding is now 0, ensure ALL are marked
+    if (driver.codHolding <= 0) {
+      await Order.updateMany(
+        { driver: driver._id, status: "completed", codAmount: { $gt: 0 } },
+        { codSettled: true }
+      );
+    }
 
     const settlement = new CODSettlement({
       driver: new mongoose.Types.ObjectId(data.driverId),

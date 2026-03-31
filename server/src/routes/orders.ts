@@ -124,6 +124,12 @@ function normalizeOrderImages(order: any): any {
       normalizeBase64Image(img),
     );
   }
+
+  // Normalize package photo if present
+  if (order && order.packagePhoto) {
+    order.packagePhoto = normalizeBase64Image(order.packagePhoto);
+  }
+
   return order;
 }
 
@@ -149,7 +155,7 @@ const createOrderSchema = z
     deliveryAddress: z.string().min(1),
 
     // Support explicit distanceKm
-    distanceKm: z.number().positive().optional(),
+    distanceKm: z.number().min(0).optional(),
 
     // Support coordinate-based distance calculation
     pickup: z
@@ -201,7 +207,8 @@ router.post(
         serviceType: body.serviceType,
         codAmount: body.codAmount || 0,
         isBulky: body.isBulky || false,
-        size: body.size || "Nhỏ", // Add size field for surcharge calculation
+        size: body.size || "Nhỏ",
+        packagePhoto: body.packagePhoto,
       };
 
       // Handle customer info - support object, string ID, or flat fields
@@ -266,7 +273,7 @@ router.post(
         );
       }
 
-      if (!distanceKm) {
+      if (distanceKm === undefined || distanceKm === null) {
         throw new Error(
           "distanceKm is required or must provide pickup/dropoff coordinates",
         );
@@ -317,6 +324,14 @@ router.get("/", async (req: Request, res: Response) => {
       from: req.query.from as string,
       to: req.query.to as string,
     });
+
+    // Normalize images in all orders
+    if (result.orders && Array.isArray(result.orders)) {
+      result.orders = result.orders.map((order: any) =>
+        normalizeOrderImages(order),
+      );
+    }
+
     res.json(result);
   } catch (error: any) {
     res.status(error.statusCode || 500).json({ error: error.message });

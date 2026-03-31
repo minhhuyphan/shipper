@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 import swaggerUi from "swagger-ui-express";
@@ -19,6 +20,7 @@ import driverMobileRoutes from "./routes/driver-mobile";
 import userRoutes from "./routes/users";
 
 const app = express();
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 const server = http.createServer(app);
 
 // Socket.IO
@@ -45,6 +47,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/auth", authRoutes);
 app.use("/api/drivers", driverMobileRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/pricing", pricingRoutes);
 
 // Test data endpoint (remove after testing)
 app.post("/api/test/create-orders", async (req, res) => {
