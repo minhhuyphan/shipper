@@ -1,3 +1,8 @@
+/**
+ * Model: Order
+ * Chức năng: Quản lý toàn bộ thông tin đơn hàng, lịch sử sự kiện, khiếu nại và nhật ký thay đổi (Audit Log).
+ * Các thành phần chính: Schema Order, Interface IOrder, Định giá (PricingBreakdown), Trạng thái đơn hàng.
+ */
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IOrderEvent {

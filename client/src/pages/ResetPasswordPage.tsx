@@ -1,3 +1,8 @@
+/**
+ * Reset Password Page
+ * Chức năng: Trang đích để người dùng đặt lại mật khẩu mới từ link email.
+ * Các thành phần chính: Lấy Token từ URL, Form nhập mật khẩu mới & xác nhận, Validate mật khẩu, Cập nhật mật khẩu mới.
+ */
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";

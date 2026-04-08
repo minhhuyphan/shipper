@@ -1,3 +1,8 @@
+/**
+ * Model: CODSettlement
+ * Chức năng: Ghi lại các giao dịch đối soát tiền COD (thu hộ) giữa tài xế và công ty.
+ * Các thành phần chính: Driver, Amount (số tiền), Method (tiền mặt/chuyển khoản), Người tạo giao dịch.
+ */
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface ICODSettlement extends Document {

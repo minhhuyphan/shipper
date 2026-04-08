@@ -1,3 +1,8 @@
+/**
+ * API Integration Test
+ * Chức năng: Script đơn giản để kiểm tra phản hồi từ các endpoint của Server.
+ * Thành phần: Sử dụng Axios để gọi API và in kết quả trả về ra console.
+ */
 import axios from "axios";
 
 async function testApi() {

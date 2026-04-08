@@ -1,3 +1,8 @@
+/**
+ * Route: Orders
+ * Chức năng: Quản lý toàn bộ vòng đời của đơn hàng dành cho Admin.
+ * Các thành phần chính: Lấy danh sách, xem chi tiết, tạo đơn hàng, cập nhật trạng thái, xử lý khiếu nại và xem audit log.
+ */
 import { Router, Request, Response } from "express";
 import { z } from "zod";
 import { orderService } from "../services/orderService";

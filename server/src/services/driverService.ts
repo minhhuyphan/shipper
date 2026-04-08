@@ -1,3 +1,7 @@
+/**
+ * Driver Service
+ * Chức năng: Xử lý logic nghiệp vụ cho tài xế (phê duyệt, tính toán số dư, cập nhật vị trí, v.v.).
+ */
 import { Driver, CODSettlement, Order } from "../models";
 import { AppError } from "../middleware/errorHandler";
 import mongoose from "mongoose";

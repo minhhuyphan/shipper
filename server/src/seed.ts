@@ -1,3 +1,8 @@
+/**
+ * Database Seeder
+ * Chức năng: Khởi tạo dữ liệu mẫu (admin, tài xế, đơn hàng, cấu hình giá) để phục vụ việc phát triển và thử nghiệm.
+ * Thận trọng: Lệnh này xóa sạch dữ liệu cũ trước khi nạp dữ liệu mới.
+ */
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { config } from './config';

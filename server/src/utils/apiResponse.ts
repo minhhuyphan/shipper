@@ -1,4 +1,8 @@
 /**
+ * API Response Utility
+ * Chức năng: Định nghĩa cấu trúc chuẩn cho các phản hồi từ API (thành công/thất bại).
+ */
+/**
  * Standard API Response Format cho Android + Web Client
  * Giúp client dễ dàng parse response và xử lý error
  */

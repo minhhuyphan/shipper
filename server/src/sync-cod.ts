@@ -1,3 +1,8 @@
+/**
+ * COD Sync Utility
+ * Chức năng: Đồng bộ hóa lại số dư COD đang giữ của tài xế dựa trên các đơn hàng thực tế trong database.
+ * Cách dùng: Chạy độc lập khi phát hiện sai lệch số liệu COD giữa màn hình Home và Quản lý COD.
+ */
 import mongoose from "mongoose";
 import { Driver, Order } from "./models";
 import dotenv from "dotenv";

@@ -1,3 +1,7 @@
+/**
+ * Auth Service
+ * Chức năng: Xử lý logic nghiệp vụ liên quan đến xác thực (đăng nhập, đổi mật khẩu, quên mật khẩu).
+ */
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";

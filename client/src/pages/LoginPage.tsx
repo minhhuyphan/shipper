@@ -1,3 +1,8 @@
+/**
+ * Login Page
+ * Chức năng: Cung cấp giao diện đăng nhập cho quản trị viên và nhân viên.
+ * Các thành phần chính: Form Email/Mật khẩu, Xử lý xác thực qua AuthContext, Chuyển hướng sau đăng nhập, Link quên mật khẩu.
+ */
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";

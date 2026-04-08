@@ -1,3 +1,8 @@
+/**
+ * Model: PricingConfig
+ * Chức năng: Quản lý cấu hình giá cước vận chuyển, phí COD, phụ phí giờ cao điểm và đồ cồng kềnh.
+ * Các thành phần chính: Giá mở cửa (baseFare), Giá theo km, Hệ số dịch vụ (Express/Economy), Lịch sử thay đổi (Audit).
+ */
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPeakHourSurcharge {

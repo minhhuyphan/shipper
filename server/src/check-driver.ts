@@ -1,3 +1,8 @@
+/**
+ * Driver Data Checker
+ * Chức năng: Kiểm tra nhanh thông tin một tài xế cụ thể trong database (thử nghiệm).
+ * Thành phần: Kết nối DB, tìm tài xế theo ID và in giá trị codHolding.
+ */
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config({ path: "../.env" });

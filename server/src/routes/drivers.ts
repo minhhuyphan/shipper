@@ -1,3 +1,8 @@
+/**
+ * Route: Drivers
+ * Chức năng: Quản lý hồ sơ tài xế và đối soát tiền COD (Admin).
+ * Các thành phần chính: Phê duyệt tài xế, khóa tài khoản, xem danh sách đơn hàng của tài xế, thực hiện đối soát COD.
+ */
 import { Router, Request, Response } from "express";
 import { z } from "zod";
 import { driverService } from "../services/driverService";

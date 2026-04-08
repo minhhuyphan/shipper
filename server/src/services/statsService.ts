@@ -1,3 +1,7 @@
+/**
+ * Analytics & Stats Service
+ * Chức năng: Tổng hợp số liệu thống kê doanh thu, đơn hàng và tài xế cho Dashboard.
+ */
 import { Order } from '../models';
 
 export class StatsService {

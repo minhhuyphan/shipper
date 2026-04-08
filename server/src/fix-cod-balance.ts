@@ -1,3 +1,8 @@
+/**
+ * COD Balance Fix Tool
+ * Chức năng: Sửa lỗi sai lệch số dư COD bằng cách tính toán lại từ đầu.
+ * Thành phần: Tính tổng COD từ đơn hàng, trừ đi tổng tiền đã đối soát, và cập nhật lại vào trường codHolding của tài xế.
+ */
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config({ path: "../.env" });

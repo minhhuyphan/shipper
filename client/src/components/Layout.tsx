@@ -1,3 +1,8 @@
+/**
+ * Main Layout Component
+ * Chức năng: Định nghĩa cấu trúc giao diện chung cho trang Admin, bao gồm Sidebar điều hướng và vùng hiển thị nội dung chính.
+ * Các thành phần chính: Sidebar (NavLinks), Thông tin User, Nút Đăng xuất, Outlet (vùng chứa nội dung trang).
+ */
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 

@@ -1,3 +1,7 @@
+/**
+ * Mailer Service
+ * Chức năng: Cấu hình và gửi email thông báo (ví dụ: email đặt lại mật khẩu).
+ */
 import nodemailer from "nodemailer";
 import { config } from "../config";
 

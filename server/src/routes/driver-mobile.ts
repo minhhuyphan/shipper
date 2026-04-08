@@ -1,3 +1,8 @@
+/**
+ * Route: Driver Mobile
+ * Chức năng: Cung cấp API chuyên biệt cho ứng dụng di động của Tài xế.
+ * Các thành phần chính: Xem hồ sơ cá nhân, cập nhật trạng thái online/offline, xem chi tiết thu nhập và lịch sử COD.
+ */
 import { Router, Request, Response } from "express";
 import { driverService } from "../services/driverService";
 import { Driver, Order, User } from "../models";

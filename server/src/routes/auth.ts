@@ -1,3 +1,8 @@
+/**
+ * Route: Auth
+ * Chức năng: Quản lý các luồng xác thực người dùng.
+ * Các thành phần chính: Đăng nhập (Login), Đăng ký (Signup), Đổi mật khẩu, Quên/Đặt lại mật khẩu.
+ */
 import { Router, Request, Response } from "express";
 import { z } from "zod";
 import { authService } from "../services/authService";

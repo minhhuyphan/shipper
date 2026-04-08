@@ -1,3 +1,8 @@
+/**
+ * Model: User
+ * Chức năng: Định nghĩa schema và quản lý dữ liệu người dùng (Admin, Staff, Customer, Driver).
+ * Các thành phần chính: Schema User, Interface IUser, Phân quyền Role.
+ */
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IUser extends Document {

@@ -1,3 +1,7 @@
+/**
+ * Authentication Middleware
+ * Chức năng: Kiểm tra và xác thực JWT token trong header của các request bảo mật.
+ */
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';

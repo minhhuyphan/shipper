@@ -1,3 +1,8 @@
+/**
+ * Authentication Route Guard
+ * Chức năng: Bảo vệ các route yêu cầu đăng nhập, tự động chuyển hướng người dùng về trang Login nếu không có Token.
+ * Các thành phần chính: Kiểm tra trạng thái Authenticating, Redirect về /login nếu chưa đăng nhập.
+ */
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 

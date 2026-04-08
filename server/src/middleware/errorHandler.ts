@@ -1,3 +1,7 @@
+/**
+ * Global Error Handler
+ * Chức năng: Tập trung xử lý tất cả các lỗi xảy ra trong ứng dụng và trả về phản hồi chuẩn API.
+ */
 import { Request, Response, NextFunction } from 'express';
 
 export class AppError extends Error {

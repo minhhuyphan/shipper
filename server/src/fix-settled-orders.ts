@@ -1,3 +1,8 @@
+/**
+ * Settlement Cleanup Tool
+ * Chức năng: Đánh dấu hàng loạt đơn hàng là đã đối soát (codSettled: true) khi số dư thực tế đã về 0.
+ * Thành phần: Cập nhật trường codSettled cho các đơn hàng hoàn thành của một tài xế cụ thể.
+ */
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env" });

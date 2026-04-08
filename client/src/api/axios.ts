@@ -1,3 +1,8 @@
+/**
+ * Axios Instance Configuration
+ * Chức năng: Khởi tạo trình gọi API, thiết lập Base URL và các Interceptor để xử lý Token/Lỗi 401.
+ * Các thành phần chính: Interceptor request (đính kèm JWT), Interceptor response (tự động logout khi hết hạn).
+ */
 import axios from 'axios';
 
 const api = axios.create({

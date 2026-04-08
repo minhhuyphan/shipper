@@ -1,3 +1,7 @@
+/**
+ * Database Connection Config
+ * Chức năng: Thiết lập kết nối giữa ứng dụng và MongoDB bằng Mongoose.
+ */
 import mongoose from 'mongoose';
 import { config } from './index';
 

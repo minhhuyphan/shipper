@@ -1,3 +1,8 @@
+/**
+ * Query Debugger
+ * Chức năng: Thử nghiệm và tìm lỗi (debug) cho các câu lệnh truy vấn MongoDB.
+ * Thành phần: Kiểm tra kiểu dữ liệu (ObjectId vs String) và verify kết quả trả về của các query phức tạp.
+ */
 import mongoose from "mongoose";
 
 const MONGODB_URI = "mongodb+srv://GoXpress:B9qjcDdF4LP1uK77@cluster0.vkey5u6.mongodb.net/shipper-admin";

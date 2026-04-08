@@ -1,3 +1,8 @@
+/**
+ * Driver Income Reporter
+ * Chức năng: Truy vấn và trình bày chi tiết thu nhập của một tài xế.
+ * Thành phần: Sử dụng MongoDB Aggregate để tính tổng, trung bình, min/max thu nhập và liệt kê chi tiết từng đơn hàng.
+ */
 import mongoose from "mongoose";
 import { Order } from "./models";
 

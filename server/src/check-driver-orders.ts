@@ -1,3 +1,8 @@
+/**
+ * Driver Orders Inspector
+ * Chức năng: Kiểm tra toàn bộ danh sách đơn hàng được gán cho một tài xế cụ thể.
+ * Thành phần: Hiển thị 20 đơn mới nhất, trạng thái, tiền COD và trạng thái đối soát của từng đơn.
+ */
 import mongoose from "mongoose";
 import { Driver, Order } from "./models";
 import dotenv from "dotenv";

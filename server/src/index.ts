@@ -1,3 +1,8 @@
+/**
+ * Server Entry Point
+ * Chức năng: Khởi tạo Server Express, kết nối Database, cấu hình Socket.IO và định nghĩa hệ thống Route.
+ * Các thành phần chính: Express app, HTTP Server, Socket.IO Server, Middleware, DB Connection.
+ */
 import express from "express";
 import cors from "cors";
 import path from "path";

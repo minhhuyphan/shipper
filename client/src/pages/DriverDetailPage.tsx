@@ -1,3 +1,8 @@
+/**
+ * Driver Detail Page
+ * Chức năng: Hiển thị hồ sơ chi tiết, giấy tờ pháp lý và lịch sử nộp tiền COD của tài xế.
+ * Các thành phần chính: Thông tin cá nhân & phương tiện, Ảnh CCCD/Bằng lái (Base64), Thống kê hiệu suất, Lịch sử đối soát COD.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { driversApi, codApi } from '../api/services';

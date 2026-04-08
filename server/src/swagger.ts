@@ -1,3 +1,8 @@
+/**
+ * API Documentation Configuration
+ * Chức năng: Cấu hình Swagger UI để hiển thị tài liệu hướng dẫn sử dụng API.
+ * Các thành phần chính: OpenAPI Definition, Security Schemes, API Paths (Auth, Orders, Drivers, v.v.).
+ */
 import swaggerJsdoc from 'swagger-jsdoc';
 
 const options: swaggerJsdoc.Options = {

@@ -1,3 +1,8 @@
+/**
+ * Route: Pricing
+ * Chức năng: Quản lý các cấu hình giá cước của hệ thống.
+ * Các thành phần chính: Xem cấu hình hiện tại, tạo phiên bản mới, kích hoạt cấu hình và mô phỏng tính giá (Simulate).
+ */
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { pricingService } from '../services/pricingService';

@@ -1,3 +1,8 @@
+/**
+ * COD Settlement Page
+ * Chức năng: Quản lý tiền thu hộ (COD) của tài xế và thực hiện đối soát nộp tiền về công ty.
+ * Các thành phần chính: Bảng theo dõi tiền COD đang giữ theo từng tài xế, Cảnh báo nộp muộn, Form xác nhận đối soát, Lịch sử giao dịch, Xuất báo cáo CSV.
+ */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { codApi } from '../api/services';

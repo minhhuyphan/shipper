@@ -1,3 +1,8 @@
+/**
+ * ID Verification Tool
+ * Chức năng: Kiểm tra một ID bất kỳ thuộc về User hay Driver trong hệ thống.
+ * Thành phần: Tìm kiếm chéo giữa bảng User và Driver để xác định vai trò của ID đó.
+ */
 import mongoose from "mongoose";
 import { User, Driver } from "./models";
 

@@ -1,3 +1,8 @@
+/**
+ * Order Detail Page
+ * Chức năng: Hiển thị thông tin chi tiết của một đơn hàng cụ thể, lịch trình di chuyển và xử lý khiếu nại.
+ * Các thành phần chính: Chi tiết giao nhận, Bảng giá, Ảnh chứng minh (package/delivery), Lịch trình (Timeline), Form cập nhật khiếu nại, Audit log.
+ */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";

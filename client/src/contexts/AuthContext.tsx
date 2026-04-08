@@ -1,3 +1,7 @@
+/**
+ * Authentication Context Provider
+ * Chức năng: Quản lý trạng thái đăng nhập, token và thông tin người dùng trong toàn bộ ứng dụng React.
+ */
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { authApi } from "../api/services";

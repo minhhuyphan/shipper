@@ -1,3 +1,8 @@
+/**
+ * Settlement History Checker
+ * Chức năng: Kiểm tra lịch sử các giao dịch đối soát COD của một tài xế.
+ * Thành phần: Tổng hợp số liệu từ bảng CODSettlement để verify tổng số tiền đã nộp về công ty.
+ */
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config({ path: "../.env" });

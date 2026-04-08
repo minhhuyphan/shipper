@@ -1,3 +1,7 @@
+/**
+ * Application Configuration
+ * Chức năng: Quản lý các biến môi trường và thiết lập chung cho hệ thống (Port, MongoURI, JWT Secret, v.v.).
+ */
 import dotenv from 'dotenv';
 dotenv.config();
 

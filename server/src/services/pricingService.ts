@@ -1,3 +1,7 @@
+/**
+ * Pricing Service
+ * Chức năng: Tính toán giá cước dựa trên khoảng cách, dịch vụ, và các loại phụ phí.
+ */
 import { PricingConfig } from "../models";
 import { AppError } from "../middleware/errorHandler";
 import mongoose from "mongoose";

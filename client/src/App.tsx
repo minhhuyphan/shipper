@@ -1,3 +1,8 @@
+/**
+ * Main App Component
+ * Chức năng: Cấu hình Router, React Query Client và các Provider (Auth) cho toàn bộ ứng dụng.
+ * Các thành phần chính: Hệ thống Route (Public/Protected), Layout bọc ngoài các trang admin.
+ */
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";

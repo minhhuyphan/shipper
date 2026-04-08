@@ -1,3 +1,7 @@
+/**
+ * Order Service
+ * Chức năng: Xử lý logic nghiệp vụ cho đơn hàng (tạo mới, gán tài xế, cập nhật trạng thái, xử lý khiếu nại).
+ */
 import { Order, PricingConfig } from "../models";
 import { AppError } from "../middleware/errorHandler";
 import mongoose from "mongoose";

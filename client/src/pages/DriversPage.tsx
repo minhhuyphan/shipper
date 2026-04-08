@@ -1,3 +1,8 @@
+/**
+ * Drivers Management Page
+ * Chức năng: Quản lý danh sách tài xế, phê duyệt hồ sơ và kiểm soát trạng thái hoạt động.
+ * Các thành phần chính: Bảng danh sách tài xế (thông tin cá nhân, thu nhập, COD), Bộ lọc trạng thái, Nút Duyệt/Khóa tài khoản.
+ */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

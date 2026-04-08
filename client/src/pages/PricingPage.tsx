@@ -1,3 +1,8 @@
+/**
+ * Pricing Configuration Page
+ * Chức năng: Quản lý các phiên bản giá cước và cung cấp công cụ giả lập tính phí giao hàng.
+ * Các thành phần chính: Form tạo cấu hình mới, Danh sách các phiên bản giá, Chi tiết cấu hình đang kích hoạt, Công cụ Simulation (giả lập tính giá).
+ */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { pricingApi } from '../api/services';

@@ -1,3 +1,7 @@
+/**
+ * Data Validation Middleware
+ * Chức năng: Sử dụng Zod để kiểm tra tính hợp lệ của dữ liệu đầu vào (body, query, params).
+ */
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema } from "zod";
 

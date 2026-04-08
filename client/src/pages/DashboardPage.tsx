@@ -1,3 +1,8 @@
+/**
+ * Dashboard Page
+ * Chức năng: Hiển thị bảng điều khiển thời gian thực với các số liệu thống kê quan trọng và biểu đồ doanh thu.
+ * Các thành phần chính: Thống kê tổng quan (đơn hàng, tài xế), Biểu đồ ECharts (Doanh thu, Đơn hàng), Danh sách tài xế trực tuyến.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import ReactECharts from 'echarts-for-react';

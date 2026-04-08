@@ -1,3 +1,8 @@
+/**
+ * Route: Stats
+ * Chức năng: Cung cấp các số liệu thống kê cho trang Dashboard.
+ * Các thành phần chính: Báo cáo doanh thu, Tổng hợp đơn hàng, Danh sách tài xế trực tuyến.
+ */
 import { Router, Request, Response } from 'express';
 import { statsService } from '../services/statsService';
 import { driverService } from '../services/driverService';

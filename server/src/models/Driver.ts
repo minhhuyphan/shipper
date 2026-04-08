@@ -1,3 +1,8 @@
+/**
+ * Model: Driver
+ * Chức năng: Quản lý thông tin tài xế, phương tiện, trạng thái hoạt động và số dư COD đang giữ.
+ * Các thành phần chính: Schema Driver, Trạng thái phê duyệt, Tọa độ cuối (Last Location), Ví COD (codHolding).
+ */
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IDriver extends Document {

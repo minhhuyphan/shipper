@@ -1,3 +1,8 @@
+/**
+ * COD Diagnostic Tool
+ * Chức năng: Kiểm tra và in báo cáo chi tiết về sự sai lệch tiền COD của từng tài xế.
+ * Thành phần: So sánh codHolding trong bản ghi Driver và tổng codAmount từ các Order hoàn thành chưa đối soát.
+ */
 import mongoose from "mongoose";
 import { Driver, Order } from "./models";
 import dotenv from "dotenv";

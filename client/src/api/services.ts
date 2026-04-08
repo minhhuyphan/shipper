@@ -1,3 +1,8 @@
+/**
+ * API Service Collection
+ * Chức năng: Tập hợp tất cả các hàm gọi API của hệ thống, phân loại theo module (Auth, Stats, Orders, Drivers, v.v.).
+ * Các thành phần chính: authApi, statsApi, ordersApi, pricingApi, driversApi, codApi.
+ */
 import api from "./axios";
 
 // Auth

@@ -1,3 +1,8 @@
+/**
+ * Route: Users
+ * Chức năng: Quản lý thông tin hồ sơ người dùng và các thao tác liên quan đến tài khoản.
+ * Các thành phần chính: Xem profile cá nhân, Cập nhật thông tin, Thay đổi mật khẩu nội bộ.
+ */
 import { Router, Request, Response } from "express";
 import { z } from "zod";
 import { authService } from "../services/authService";

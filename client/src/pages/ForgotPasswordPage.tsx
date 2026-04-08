@@ -1,3 +1,8 @@
+/**
+ * Forgot Password Page
+ * Chức năng: Cho phép người dùng yêu cầu khôi phục mật khẩu qua email.
+ * Các thành phần chính: Form nhập Email, Gửi yêu cầu đến Server, Thông báo trạng thái gửi thành công/thất bại.
+ */
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
